@@ -1,6 +1,8 @@
 package com.jotion.lp.Controller;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.jotion.lp.DTO.UsuarioDTO;
 import com.jotion.lp.Entity.Usuario;
 import com.jotion.lp.Service.UsuarioService;
 import java.util.List;
@@ -13,22 +15,22 @@ public class UsuarioController {
     private UsuarioService service;
 
     @GetMapping
-    public List<Usuario> listarTodos() {
+    public List<UsuarioDTO> listarTodos() {
         return service.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public Usuario buscarPorId(@PathVariable Long id) {
+    public UsuarioDTO buscarPorId(@PathVariable Long id) {
         return service.buscarPorId(id);
     }
 
     @PostMapping
-    public Usuario criar(@RequestBody Usuario usuario) {
+    public UsuarioDTO criar(@RequestBody Usuario usuario) {
         return service.salvar(usuario);
     }
 
     @PutMapping("/{id}")
-    public Usuario atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
+    public UsuarioDTO atualizar(@PathVariable Long id, @RequestBody Usuario usuario) {
         return service.atualizar(id, usuario);
     }
 

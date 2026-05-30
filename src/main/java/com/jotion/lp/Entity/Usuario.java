@@ -16,6 +16,10 @@ public class Usuario {
     
     @Column(name = "data_criacao")
     private LocalDateTime dataCriacao;
+    @PrePersist
+    protected void Oncreate(){
+        this.dataCriacao = LocalDateTime.now();
+    }
     
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
