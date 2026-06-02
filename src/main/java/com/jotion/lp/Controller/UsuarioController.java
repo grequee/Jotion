@@ -2,6 +2,7 @@ package com.jotion.lp.Controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.jotion.lp.DTO.LoginDTO;
 import com.jotion.lp.DTO.UsuarioDTO;
 import com.jotion.lp.Entity.Usuario;
 import com.jotion.lp.Service.UsuarioService;
@@ -37,5 +38,11 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
         service.deletar(id);
+    }
+
+    // ← adicionado aqui
+    @PostMapping("/login")
+    public String login(@RequestBody LoginDTO dados) {
+        return service.login(dados);
     }
 }
