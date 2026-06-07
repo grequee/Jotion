@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.jotion.lp.Config.JwtUtil;
+import com.jotion.lp.DTO.AuthResponseDTO;
 import com.jotion.lp.DTO.LoginDTO;
 import com.jotion.lp.DTO.UsuarioDTO;
+import com.jotion.lp.Entity.RefreshToken;
 import com.jotion.lp.Entity.Usuario;
 import com.jotion.lp.Repository.UsuarioRepository;
 import java.util.List;
@@ -20,7 +22,10 @@ public class UsuarioService {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private JwtUtil jwtUtil;  // ← adicionado aqui
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
     private UsuarioDTO toDTO(Usuario u) {
         return new UsuarioDTO(u.getId(), u.getNome(), u.getDataCriacao());
@@ -53,15 +58,29 @@ public class UsuarioService {
         repository.deleteById(id);
     }
 
-    public String login(LoginDTO dados) {  // ← adicionado aqui
+    public AuthResponseDTO login(LoginDTO dados) {
         Usuario usuario = repository.findByNome(dados.getNome())
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         if (passwordEncoder.matches(dados.getSenha(), usuario.getSenha())) {
-            return jwtUtil.gerarToken(usuario.getNome());
+            String accessToken = jwtUtil.gerarToken(usuario.getNome());
+            String refreshToken = refreshTokenService.criar(usuario).getToken();
+            return new AuthResponseDTO(accessToken, refreshToken);
         } else {
             throw new RuntimeException("Senha incorreta");
         }
+    }
+
+    public AuthResponseDTO refresh(String token) {
+        RefreshToken refreshToken = refreshTokenService.validar(token);
+        String novoAccessToken = jwtUtil.gerarToken(refreshToken.getUsuario().getNome());
+        return new AuthResponseDTO(novoAccessToken, refreshToken.getToken());
+    }
+
+    public UsuarioDTO buscarPorNome(String nome) {
+        Usuario usuario = repository.findByNome(nome)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        return toDTO(usuario);
     }
 
     private Usuario buscarEntidade(Long id) {

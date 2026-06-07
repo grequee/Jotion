@@ -13,24 +13,21 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${jwt.expiration}")
-    private Long expiration;
+    private static final long EXPIRATION = 15 * 60 * 1000; // 15 minutos
 
     private Key getKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    // Gera o token
     public String gerarToken(String nome) {
         return Jwts.builder()
             .setSubject(nome)
             .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + expiration))
+            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
             .signWith(getKey())
             .compact();
     }
 
-    // Valida o token e retorna o nome do usuário
     public String validarToken(String token) {
         return Jwts.parserBuilder()
             .setSigningKey(getKey())
