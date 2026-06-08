@@ -15,7 +15,7 @@ public class RefreshTokenService {
     @Autowired
     private RefreshTokenRepository repository;
 
-    @Transactional // ← adicionado aqui
+    @Transactional
     public RefreshToken criar(Usuario usuario) {
         repository.deleteByUsuario(usuario);
 
@@ -37,5 +37,12 @@ public class RefreshTokenService {
         }
 
         return refreshToken;
+    }
+
+    @Transactional
+    public void revogar(String token) {
+        RefreshToken refreshToken = repository.findByToken(token)
+            .orElseThrow(() -> new RuntimeException("Refresh token inválido"));
+        repository.delete(refreshToken);
     }
 }

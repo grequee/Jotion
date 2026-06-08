@@ -27,6 +27,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // Rotas liberadas sem token
         if (path.equals("/usuarios/login") ||
             path.equals("/usuarios/refresh") ||
+            path.equals("/usuarios/logout") ||
             (path.equals("/usuarios") && method.equals("POST"))) {
             filterChain.doFilter(request, response);
             return;

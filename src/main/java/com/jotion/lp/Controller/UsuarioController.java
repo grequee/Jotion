@@ -2,6 +2,7 @@ package com.jotion.lp.Controller;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import com.jotion.lp.DTO.AuthResponseDTO;
 import com.jotion.lp.DTO.LoginDTO;
 import com.jotion.lp.DTO.UsuarioDTO;
@@ -50,6 +51,12 @@ public class UsuarioController {
     @PostMapping("/refresh")
     public AuthResponseDTO refresh(@RequestBody String refreshToken) {
         return service.refresh(refreshToken);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestBody String refreshToken) {
+        service.logout(refreshToken);
+        return ResponseEntity.ok("Logout realizado com sucesso!");
     }
 
     @GetMapping("/me")

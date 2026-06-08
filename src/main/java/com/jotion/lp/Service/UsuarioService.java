@@ -83,6 +83,10 @@ public class UsuarioService {
         return toDTO(usuario);
     }
 
+    public void logout(String refreshToken) {
+        refreshTokenService.revogar(refreshToken);
+    }
+
     private Usuario buscarEntidade(Long id) {
         return repository.findById(id)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
