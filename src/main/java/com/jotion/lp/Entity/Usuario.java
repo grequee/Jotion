@@ -32,7 +32,20 @@ public class Usuario {
     
     public LocalDateTime getDataCriacao() { return dataCriacao; }
     public void setDataCriacao(LocalDateTime dataCriacao) { this.dataCriacao = dataCriacao; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Usuario)) return false;
+        Usuario usuario = (Usuario) o;
+        return id != null && id.equals(usuario.getId());
     }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+}
     
     
     

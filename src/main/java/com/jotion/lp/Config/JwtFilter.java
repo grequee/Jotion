@@ -24,10 +24,17 @@ public class JwtFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         String method = request.getMethod();
 
+        // Permite requisições de preflight do CORS (OPTIONS)
+        if (method.equals("OPTIONS")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // Rotas liberadas sem token
         if (path.equals("/usuarios/login") ||
             path.equals("/usuarios/refresh") ||
             path.equals("/usuarios/logout") ||
+            path.startsWith("/ws/") ||
             (path.equals("/usuarios") && method.equals("POST"))) {
             filterChain.doFilter(request, response);
             return;
