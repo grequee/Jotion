@@ -47,7 +47,7 @@ O `access_token` é obtido no endpoint `/usuarios/login`.
 
 ---
 
-## 📌 Endpoints da API
+## Endpoints da API
 
 ### Usuários — `/usuarios`
 
